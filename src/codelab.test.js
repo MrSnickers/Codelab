@@ -420,12 +420,10 @@ function balancedParens(hash, string) {
     if (hash[characters[i]] || closingParens[characters[i]]) {
       if (hash[characters[i]]) {
         parensSeen.push(hash[characters[i]]);
+      } else if (characters[i] === parensSeen[parensSeen.length - 1]) {
+        parensSeen.pop();
       } else {
-        if (characters[i] === parensSeen[parensSeen.length - 1]) {
-          parensSeen.pop();
-        } else {
-          return false;
-        }
+        return false;
       }
     }
   }
@@ -469,7 +467,6 @@ Note for example that Carla (ID: 6) is only friends with fellow Engineering empl
 1 -- has many external
 4 -- has one external
 6 -- only has Engineering
-
 
 
 var employees_input = [
@@ -571,14 +568,14 @@ Your function will accept an array representing a stream of event timestamps and
 2) Firing once after the last event in a cluster, e.g. after the user window stops resizing.
 3) Firing every interval milliseconds during a cluster, e.g. every 100ms while the window is resizing.
 
-Test Input	Expected Result	Result	Log
-20, false, true, 0, [0,10,20,30]	[0]	-
-20, true, false, 0, [0,10,20,30]	[50]	-
-20, false, true, 20, [0,10,20,30]	[0,20]	-
-20, false, true, 0, [0,10,40]	[0,40]	-
-20, true, false, 0, [0,10,40]	[30,60]	-
-20, true, true, 0, [0,10,50]	[0,30,50,70]	-
-20, true, true, 10, [0,10,50]	[0,10,20,30,50,60,70]	-
+Test Input Expected Result Result Log
+20, false, true, 0, [0,10,20,30] [0] -
+20, true, false, 0, [0,10,20,30] [50] -
+20, false, true, 20, [0,10,20,30] [0,20] -
+20, false, true, 0, [0,10,40] [0,40] -
+20, true, false, 0, [0,10,40] [30,60] -
+20, true, true, 0, [0,10,50] [0,30,50,70] -
+20, true, true, 10, [0,10,50] [0,10,20,30,50,60,70] -
 
 
 function throttle(wait, onLast, onFirst, interval, timestamps) {
@@ -599,9 +596,9 @@ function throttle(wait, onLast, onFirst, interval, timestamps) {
 The deletion distance between two strings is the minimum sum of ASCII values of characters that you need to delete in the two strings in order to have the same string. The deletion distance between cat and at is 99, because you can just delete the first character of cat and the ASCII value of 'c' is 99. The deletion distance between cat and bat is 98 + 99, because you need to delete the first character of both words. Of course, the deletion distance between two strings can't be greater than the sum of their total ASCII values, because you can always just delete both of the strings entirely.Implement an efficient function to find the deletion distance between two strings.You can refer to the Wikipedia article on the algorithm for edit distance if you want to. The algorithm there is not quite the same as the algorithm required here, but it's similar.
 
 
-"at", "cat"	99	-
-"boat", "got"	298	-
-"thought", "sloughs"	674	-
+"at", "cat" 99 -
+"boat", "got" 298 -
+"thought", "sloughs" 674 -
 */
 
 function getDistance(item1, item2, array) {

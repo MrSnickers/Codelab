@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "babel-node src",
-    "test": "jest --coverage",
+    "test": "eslint src/codelab.test.js && jest --coverage",
     "precommit": "yarn test"
   },
   "devDependencies": {
