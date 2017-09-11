@@ -1,4 +1,4 @@
-# CSV cleaner
+# Codelab
 
 This is a collection of algorithmic solutions written in ES2016.
 
