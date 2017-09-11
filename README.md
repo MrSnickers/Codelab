@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You will need to install [`node`](https://nodejs.org/en/download/) and [`yarn`](https://yarnpkg.com/lang/en/docs/install/) on your local machine to run this cleaner.
+You will need to install [`node`](https://nodejs.org/en/download/) and [`yarn`](https://yarnpkg.com/lang/en/docs/install/) on your local machine to run the tests in this repo.
 
 
 ### Installing
@@ -42,4 +42,4 @@ the tests also include a linting step with the AirBnB style guide.
 
 ## Acknowledgments
 
-* The scaffolding of this app comes from Verekia's excellent [js-stack-from-scratch] (https://github.com/verekia/js-stack-from-scratch)
+* The scaffolding of this app comes from Verekia's excellent [js-stack-from-scratch](https://github.com/verekia/js-stack-from-scratch)
