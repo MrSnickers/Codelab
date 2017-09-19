@@ -354,6 +354,21 @@ function getProductsOfAllIntsExceptAtIndex(array) {
   return returnArray;
 }
 
+function arrayOfArrayProducts(arr) {
+  if (arr.length < 2) { return []; }
+  const forward = [1, arr[0]];
+  const back = [arr[arr.length - 1], 1];
+  const returnArray = [];
+  for (let i = 1; i < arr.length - 1; i++) {
+    forward.push(arr[i] * forward[forward.length - 1]);
+    back.unshift(arr[arr.length - (i + 1)] * back[0]);
+  }
+  for (let i = 0; i < arr.length; i++) {
+    returnArray.push(forward[i] * back[i]);
+  }
+  return returnArray;
+}
+
 test('Given an array, it returns product of all other integers not at that index', () => {
   expect(getProductsOfAllIntsExceptAtIndex([1, 7, 3, 4])).toEqual([84, 12, 28, 21]);
 });
@@ -640,4 +655,41 @@ test('Given an array, and two items of interest it returns the best distance bet
 });
 test('Given an array, and two items of interest it returns the best distance between those items', () => {
   expect(getDistance('C', 'D', array)).toEqual(2);
+});
+
+
+function getNumberOfIslands(binaryMatrix) {
+  let islandCounter = 0;
+  for (let i = 0; i < binaryMatrix.length; i++) {
+    for (let j = 0; j < binaryMatrix[0].length; j++) {
+      if (binaryMatrix[i][j] === 1) {
+        findNeighbors(binaryMatrix, i, j);
+        islandCounter++;
+      }
+    }
+  }
+  return islandCounter;
+}
+
+function resolveIsland(matrix, i, j) {
+  if (matrix[i] !== undefined && matrix[i][j] === 1) {
+    matrix[i][j] = 0; // eslint-disable-line no-param-reassign
+    findNeighbors(matrix, i, j);
+  }
+}
+
+function findNeighbors(matrix, i, j) {
+  resolveIsland(matrix, i - 1, j);
+  resolveIsland(matrix, i + 1, j);
+  resolveIsland(matrix, i, j - 1);
+  resolveIsland(matrix, i, j + 1);
+}
+const binaryMatrix = [[0, 1, 0, 1, 0],
+                     [0, 0, 1, 1, 1],
+                     [1, 0, 0, 1, 0],
+                     [0, 1, 1, 0, 0],
+                     [1, 0, 1, 0, 1]];
+
+test('Given a matrix of 1s and 0s return how many islands of 1s there are', () => {
+  expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
 });
