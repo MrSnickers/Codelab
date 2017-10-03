@@ -4,7 +4,7 @@
  This is a TDD file of various code challenges I have found on the web and the solutions I coded up.
 */
 
-// Write a function that takes an unsigned integer and returns the number of 1 bits it has.
+// Take an unsigned integer and return the number of 1 bits it has.
 function binaryConverter(integer) {
   let number = integer;
   if (typeof number !== 'number') { return new TypeError('Input must be an integer'); }
@@ -140,7 +140,7 @@ test('Given a range with two numbers, it will return both', () => {
   expect(findSteppingNumbers(10, 12)).toEqual([10, 12]);
 });
 
-// implement flatten()
+// implement flatten() for an array
 function makeFlat(array) {
   const multiArray = array;
   let flatArray = [];
@@ -156,6 +156,61 @@ function makeFlat(array) {
 
 test('Given a two dimentional array, it will return a one dimentional array', () => {
   expect(makeFlat([1, 2, 3, [4, 5], [6, [7, 8]]])).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+});
+
+// implement flatten() for a hash
+
+/*
+approach
+  iterate over keys for hash
+    if value is not an object shovel in return object
+    if value is object, flatten object
+      take root key and append new key
+      return flattend value
+      recurse if required -- base case is no values are objects
+  return returnObject
+*/
+
+function flattenHash(hash, rootKey = '') {
+  const returnHash = {};
+  const keys = Object.keys(hash);
+  for (let i = 0; i < keys.length; i++) {
+    const value = hash[keys[i]];
+    const key = `${rootKey}${keys[i]}`;
+    if (typeof (value) !== 'object') {
+      returnHash[key] = value;
+    } else {
+      const catKey = `${key}.`;
+      Object.assign(returnHash, flattenHash(value, catKey));
+    }
+  }
+  return returnHash;
+}
+
+const testHash =
+  {
+    Key1: 1,
+    Key2: {
+      a: 2,
+      b: 3,
+      c: {
+        d: 3,
+        e: 1,
+      },
+    },
+  };
+
+const flattenedTestHash =
+  {
+    Key1: 1,
+    'Key2.a': 2,
+    'Key2.b': 3,
+    'Key2.c.d': 3,
+    'Key2.c.e': 1,
+  };
+
+test('Given a nested hash, it will return a one hash with no nesting', () => {
+  expect(flattenHash(testHash)).toEqual(flattenedTestHash);
 });
 
 // first duplicate
@@ -575,71 +630,7 @@ test('Given a list of employees, return which employees have friends outside of 
   expect(friendMap(employeesInput, friendshipsInput)).toEqual(testMap);
 });
 
-/*
-function recognizeEntity(str, entities) {
-  const wordArray = str.split(/[\s!'\?,\.]/);
-  const allWords = {};
-  const multiWord = [];
-  let longestName = 0;
-  for (let i = 0; i < entities.length; i++) {
-    longestName = Math.max(longestName, entities[i].split(' ').length);
-  }
-  for (let i = 0; i < wordArray.length; i++) {
-    for (let j = 1; j <= longestName; j++) {
-      const recombinedWord = wordArray.slice(i, i+j).join(' ');
-      if (entities.indexOf(recombinedWord) !== -1) {
-        if (allWords[recombinedWord] == null) {
-          allWords[recombinedWord] = {'index':[i]};
-        } else {
-          allWords[recombinedWord].index.push(i);
-        }
-      }
-    }
-  }
-  return allWords;
-}
-
-/* Some user interactions, such as resizing and scrolling, can create a huge number of browser events in a short period of time. If listeners attached to these events take a long time to execute, the user's browser can start to slow down significantly. To mitigate this issue, we want to to implement a throttle function that will detect clusters of events and reduce the number of times we call an expensive function.
-
-Your function will accept an array representing a stream of event timestamps and return an array representing the times that a callback should have been called. If an event happens within wait time of the previous event, it is part of the same cluster. Your function should satisfy the following use cases:
-
-1) Firing once on the first event in a cluster, e.g. as soon as the window starts resizing.
-2) Firing once after the last event in a cluster, e.g. after the user window stops resizing.
-3) Firing every interval milliseconds during a cluster, e.g. every 100ms while the window is resizing.
-
-Test Input Expected Result Result Log
-20, false, true, 0, [0,10,20,30] [0] -
-20, true, false, 0, [0,10,20,30] [50] -
-20, false, true, 20, [0,10,20,30] [0,20] -
-20, false, true, 0, [0,10,40] [0,40] -
-20, true, false, 0, [0,10,40] [30,60] -
-20, true, true, 0, [0,10,50] [0,30,50,70] -
-20, true, true, 10, [0,10,50] [0,10,20,30,50,60,70] -
-
-
-function throttle(wait, onLast, onFirst, interval, timestamps) {
-    let finalArray = [];
-    let clusters = [];
-    if (onFirst = true) {
-        finalArray.push(timestamps[0]);
-    }
-    for (var i = 1; i < timestamps.length; i++) {
-        if ( timestamps[i] - timestamps[i-1] > wait) {
-            finalArray.push(timestamps[i]);
-    }
-    for
-
-}
-
-
-The deletion distance between two strings is the minimum sum of ASCII values of characters that you need to delete in the two strings in order to have the same string. The deletion distance between cat and at is 99, because you can just delete the first character of cat and the ASCII value of 'c' is 99. The deletion distance between cat and bat is 98 + 99, because you need to delete the first character of both words. Of course, the deletion distance between two strings can't be greater than the sum of their total ASCII values, because you can always just delete both of the strings entirely.Implement an efficient function to find the deletion distance between two strings.You can refer to the Wikipedia article on the algorithm for edit distance if you want to. The algorithm there is not quite the same as the algorithm required here, but it's similar.
-
-
-"at", "cat" 99 -
-"boat", "got" 298 -
-"thought", "sloughs" 674 -
-
-
+// Implement a function that finds the minimum distance between two values in an array.  There are duplicate values.
 function getDistance(item1, item2, array) {
   let index1 = '';
   let index2 = '';
@@ -681,7 +672,7 @@ test('Given an array, and two items of interest it returns the best distance bet
   expect(getDistance('C', 'D', array)).toEqual(2);
 });
 
-
+// Find the number of islands in a matrix
 function getNumberOfIslands(binaryMatrix) {
   let islandCounter = 0;
   for (let i = 0; i < binaryMatrix.length; i++) {
@@ -718,6 +709,7 @@ test('Given a matrix of 1s and 0s return how many islands of 1s there are', () =
   expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
 });
 
+/*
 // given an int N and a list of ints L of length m, find all pairs of ints in L that sum to N. Do it in the best possible run time.
 // say an array is triangular if the elements when read l to r are strictly increasing up to some point and then decreasing. [2, 3, 4, 1]. find the top of the triangle index.
 // given a string chars a-z only find the longest substring that has no repeating letters
@@ -800,3 +792,66 @@ test('Given a board with no tokens it returns false', () => {
 
   console.log(isMatch("aby", "ab*"));
   */
+/*
+function recognizeEntity(str, entities) {
+  const wordArray = str.split(/[\s!'\?,\.]/);
+  const allWords = {};
+  const multiWord = [];
+  let longestName = 0;
+  for (let i = 0; i < entities.length; i++) {
+    longestName = Math.max(longestName, entities[i].split(' ').length);
+  }
+  for (let i = 0; i < wordArray.length; i++) {
+    for (let j = 1; j <= longestName; j++) {
+      const recombinedWord = wordArray.slice(i, i+j).join(' ');
+      if (entities.indexOf(recombinedWord) !== -1) {
+        if (allWords[recombinedWord] == null) {
+          allWords[recombinedWord] = {'index':[i]};
+        } else {
+          allWords[recombinedWord].index.push(i);
+        }
+      }
+    }
+  }
+  return allWords;
+}
+
+/* Some user interactions, such as resizing and scrolling, can create a huge number of browser events in a short period of time. If listeners attached to these events take a long time to execute, the user's browser can start to slow down significantly. To mitigate this issue, we want to to implement a throttle function that will detect clusters of events and reduce the number of times we call an expensive function.
+
+Your function will accept an array representing a stream of event timestamps and return an array representing the times that a callback should have been called. If an event happens within wait time of the previous event, it is part of the same cluster. Your function should satisfy the following use cases:
+
+1) Firing once on the first event in a cluster, e.g. as soon as the window starts resizing.
+2) Firing once after the last event in a cluster, e.g. after the user window stops resizing.
+3) Firing every interval milliseconds during a cluster, e.g. every 100ms while the window is resizing.
+
+Test Input Expected Result Result Log
+20, false, true, 0, [0,10,20,30] [0] -
+20, true, false, 0, [0,10,20,30] [50] -
+20, false, true, 20, [0,10,20,30] [0,20] -
+20, false, true, 0, [0,10,40] [0,40] -
+20, true, false, 0, [0,10,40] [30,60] -
+20, true, true, 0, [0,10,50] [0,30,50,70] -
+20, true, true, 10, [0,10,50] [0,10,20,30,50,60,70] -
+
+
+function throttle(wait, onLast, onFirst, interval, timestamps) {
+    let finalArray = [];
+    let clusters = [];
+    if (onFirst = true) {
+        finalArray.push(timestamps[0]);
+    }
+    for (var i = 1; i < timestamps.length; i++) {
+        if ( timestamps[i] - timestamps[i-1] > wait) {
+            finalArray.push(timestamps[i]);
+    }
+    for
+
+}
+
+
+// The deletion distance between two strings is the minimum sum of ASCII values of characters that you need to delete in the two strings in order to have the same string. The deletion distance between cat and at is 99, because you can just delete the first character of cat and the ASCII value of 'c' is 99. The deletion distance between cat and bat is 98 + 99, because you need to delete the first character of both words. Of course, the deletion distance between two strings can't be greater than the sum of their total ASCII values, because you can always just delete both of the strings entirely.Implement an efficient function to find the deletion distance between two strings.You can refer to the Wikipedia article on the algorithm for edit distance if you want to. The algorithm there is not quite the same as the algorithm required here, but it's similar.
+
+"at", "cat" 99 -
+"boat", "got" 298 -
+"thought", "sloughs" 674 -
+*/
