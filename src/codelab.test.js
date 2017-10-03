@@ -461,15 +461,32 @@ test('Given sets of parens and a string that is out of order, it returns false',
   expect(balancedParens(hash, 'fgds[fgd(s{gfds}gfds]gfds)gfs')).toEqual(false);
 });
 
+// Given an array of timestamps in "hh:mm" format return shortest span of time between two stamps
+function minutes(string) {
+  const time = string.split(':');
+  return (Number(time[0]) * 60) + (Number(time[1]));
+}
+
+function bestTime(array) {
+  if (array.length < 2) return 0;
+  const timeArray = array.map(x => minutes(x));
+  timeArray.sort((x, y) => x - y);
+  let bestDelta = timeArray[1] - timeArray[0];
+  for (let i = 2; i < timeArray.length; i++) {
+    bestDelta = Math.min(timeArray[i] - timeArray[i - 1], bestDelta);
+  }
+  bestDelta = Math.min(((1440 - timeArray[timeArray.length - 1]) + timeArray[0]), bestDelta);
+  return bestDelta;
+}
+test('Given a set of timestamps, return sortest times between stamps', () => {
+  expect(bestTime(['10:05', '23:50', '10:20', '00:01'])).toEqual(11);
+});
+
 
 /*
 Suppose you are creating an internal networking site for your company. You have two data sets to work with. The first data set is the employees at your company, and the second is all the pairs of employees who are virtually friends so far. It does not matter which employee's ID is in which column, the friendships are bidirectional.
-
-
 You’re curious how employees are using your site. Specifically, you want to know how people between different departments are interacting.
-
 Write a function that returns a data structure that tracks, for each department: how many employees are in that department, and how many of those employees have friends in other departments.
-
 Note for example that Carla (ID: 6) is only friends with fellow Engineering employees. So while she DOES count towards the total number of employees in Engineering, she DOES NOT count towards the number of employees with friends outside the department.
 
 {
@@ -482,29 +499,29 @@ Note for example that Carla (ID: 6) is only friends with fellow Engineering empl
 1 -- has many external
 4 -- has one external
 6 -- only has Engineering
+*/
 
-
-var employees_input = [
-  "1,Richard,Engineering",
-  "2,Erlich,HR",
-  "3,Monica,Business",
-  "4,Dinesh,Engineering",
-  "6,Carla,Engineering",
-  "9,Laurie,Directors"
+const employeesInput = [
+  '1,Richard,Engineering',
+  '2,Erlich,HR',
+  '3,Monica,Business',
+  '4,Dinesh,Engineering',
+  '6,Carla,Engineering',
+  '9,Laurie,Directors',
 ];
 
-var friendships_input = [
-  "1,2",
-  "1,3",
-  "1,6",
-  "2,4"
+const friendshipsInput = [
+  '1,2',
+  '1,3',
+  '1,6',
+  '2,4',
 ];
 
 function departmentMaker(employees) {
-  var departmentHash = {};
-  for (var i = 0; i < employees.length; i++) {
-    var employee = employees[i].split(",");
-    if ( departmentHash[employee[2]] === undefined) {
+  const departmentHash = {};
+  for (let i = 0; i < employees.length; i++) {
+    const employee = employees[i].split(',');
+    if (departmentHash[employee[2]] === undefined) {
       departmentHash[employee[2]] = [employee[0]];
     } else {
       departmentHash[employee[2]].push(employee[0]);
@@ -514,33 +531,34 @@ function departmentMaker(employees) {
 }
 
 function friendMaker(employees, list) {
-  var returnHash = {};
-  for (var i = 0; i < employees.length; i++) {
-    var employee = employees[i].split(",");
+  const returnHash = {};
+  for (let i = 0; i < employees.length; i++) {
+    const employee = employees[i].split(',');
     returnHash[employee[0]] = [];
   }
-  for (var i = 0; i < list.length; i++) {
-    var friendship = list[i].split(",");
+  for (let i = 0; i < list.length; i++) {
+    const friendship = list[i].split(',');
     returnHash[friendship[0]].push(friendship[1]);
     returnHash[friendship[1]].push(friendship[0]);
   }
   return returnHash;
 }
 
-function friendMap(employees, list){
-  var departmentMap = departmentMaker(employees);
-  var departments = Object.keys(departmentMap);
-  var friends = friendMaker(employees, list);
-  var returnValue = {};
-  for (var i = 0; i < departments.length; i++) {
-    var department = departments[i];
-    var departmentEmployees = departmentMap[department];
+function friendMap(employees, list) {
+  const departmentMap = departmentMaker(employees);
+  const departments = Object.keys(departmentMap);
+  const friends = friendMaker(employees, list);
+  const returnValue = {};
+  for (let n = 0; n < departments.length; n++) {
+    const department = departments[n];
+    const departmentEmployees = departmentMap[department];
+    returnValue[department] = {};
     returnValue[department].employees = departmentEmployees.length;
-    var outsideFriendCounter = 0;
-    for (var i = 0; i < departmentEmployees.length; i++) {
-      for (var j = 0; j < friends[departmentEmployees[i]]; j++) {
-        if (departmentEmployees.indexOf(friends[departmentEmployees[i]][j]) === -1){
-          outsideFriendCounter ++;
+    let outsideFriendCounter = 0;
+    for (let i = 0; i < departmentEmployees.length; i++) {
+      for (let j = 0; j < friends[departmentEmployees[i]]; j++) {
+        if (departmentEmployees.indexOf(friends[departmentEmployees[i]][j]) === -1) {
+          outsideFriendCounter++;
           break;
         }
       }
@@ -550,8 +568,14 @@ function friendMap(employees, list){
   return returnValue;
 }
 
-console.log(friendMap(employees_input, friendships_input));
+const testMap = { Business: { employees: 1, employees_with_outside_friends: 1 }, Directors: { employees: 1, employees_with_outside_friends: 0 }, Engineering: { employees: 3, employees_with_outside_friends: 1 }, HR: { employees: 1, employees_with_outside_friends: 0 } };
 
+
+test('Given a list of employees, return which employees have friends outside of the department', () => {
+  expect(friendMap(employeesInput, friendshipsInput)).toEqual(testMap);
+});
+
+/*
 function recognizeEntity(str, entities) {
   const wordArray = str.split(/[\s!'\?,\.]/);
   const allWords = {};
@@ -614,7 +638,7 @@ The deletion distance between two strings is the minimum sum of ASCII values of 
 "at", "cat" 99 -
 "boat", "got" 298 -
 "thought", "sloughs" 674 -
-*/
+
 
 function getDistance(item1, item2, array) {
   let index1 = '';
@@ -693,3 +717,86 @@ const binaryMatrix = [[0, 1, 0, 1, 0],
 test('Given a matrix of 1s and 0s return how many islands of 1s there are', () => {
   expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
 });
+
+// given an int N and a list of ints L of length m, find all pairs of ints in L that sum to N. Do it in the best possible run time.
+// say an array is triangular if the elements when read l to r are strictly increasing up to some point and then decreasing. [2, 3, 4, 1]. find the top of the triangle index.
+// given a string chars a-z only find the longest substring that has no repeating letters
+// given two strings, tell me if they have the same characters in them
+// an array with all unique int vals find local min, meaning a[i-1] < a[i] < a[i+1]. An end can be a min
+// why is sorting in python n log n ? what algorithm is used?
+
+// board 2D array
+// player to be token
+
+
+// Write the function that assesses the win condition for a game of tic tac toe
+const winBoard = [[1,0,2],
+[2,1,0],
+[0,2,1]]
+
+const winBoard2 = [[0,1,2],
+[2,1,0],
+[0,1,1]]
+
+const failBoard = [[0,1,2],
+ [2,1,0],
+ [0,2,1]]
+
+
+function hasWon(board, token) {
+  for (let i = 0; i < board[0].length; i++) {
+    if (board[i][0] === token && board[i][1] === token && board[i][2] === token) {
+      return true;
+    }
+  }
+  for (let i = 0; i < board[0].length; i++) {
+    let vWin = true;
+    for (let j = 0; j < board[0].length; j++) {
+      if (board[j][i] !== token) {
+        vWin = false;
+      }
+    }
+    if (vWin === true) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+test('Given a board with no tokens it returns false', () => {
+  expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
+});
+
+#Array Index & Element Equality
++
++Given an array of sorted distinct integers named arr, write a function that returns an index i in arr for which arr[i] = i or -1 if no such index exists.
++
++Implement the most efficient solution possible, prove the correctness of your solution and analyze its runtime complexity (in terms of n - the length of arr).
++
++Examples:
++
++    Given arr = [-8,0,2,5] the function returns 2, since arr[2] = 2
++    Given arr = [-1,0,3,6] the function returns -1, since no index in arr satisfies arr[i] = i
+
+  function isMatch(text, pattern) {
+    let pIndex = 0;
+    let tIndex = 0;
+   while(pIndex !== pattern.length){
+     if(pattern[pIndex] === text[tIndex] || pattern[pIndex] === '.'){
+      pIndex ++;
+      tIndex++;
+     } else if (pattern[pIndex] === '*') {
+       while(text[tIndex] === pattern[pIndex -1]){
+         tIndex ++;
+       }
+       pIndex++;
+     } else {
+       return false;
+     }
+   }
+    return tIndex === text.length;
+  }
+
+  console.log(isMatch("aby", "ab*"));
+  */
