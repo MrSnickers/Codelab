@@ -337,7 +337,6 @@ class LinkedList {
   }
 }
 
-
 function removeKFromList(l, k) {
   const list = new LinkedList(l);
   list.removeNodeByData(k);
@@ -372,6 +371,35 @@ test('Given a sorted list and a value, it returns the index of the value', () =>
 });
 test('Given a sorted list and a value, it returns the index of the value', () => {
   expect(findElement([4, 5, 6, 7, 8, 9, 10, 11], 11)).toEqual(7);
+});
+
+// Given an array of sorted distinct integers named arr, write a function that returns an index i in arr for which arr[i] = i or -1 if no such index exists.
+function elementEquality(arr, head = 0, end = arr.length) {
+  let location = -1;
+  const mid = Math.floor((end + head) / 2);
+  if (arr[mid] === mid) {
+    location = mid;
+  } else if (mid > head) {
+    if (arr[mid] > mid) {
+      location = elementEquality(arr, head, mid);
+    } else {
+      location = elementEquality(arr, mid, end);
+    }
+  }
+  return location;
+}
+
+test('Given a sorted array, find element equal to the value of its index', () => {
+  expect(elementEquality([-8, 0, 2, 5])).toEqual(2);
+});
+test('Given a sorted array, find element equal to the value of its index', () => {
+  expect(elementEquality([-8, 0, 1, 3])).toEqual(3);
+});
+test('Given a sorted array, find element equal to the value of its index', () => {
+  expect(elementEquality([0, 2, 5, 7])).toEqual(0);
+});
+test('Given a sorted array with no index/ element equality, it returns -1', () => {
+  expect(elementEquality([-1, 0, 3, 6])).toEqual(-1);
 });
 
 // Returns the best profit I could have made from 1 purchase and 1 sale of 1 Apple stock yesterday
@@ -425,7 +453,7 @@ function arrayOfArrayProducts(arr) {
 }
 
 test('Given an array, it returns product of all other integers not at that index', () => {
-  expect(getProductsOfAllIntsExceptAtIndex([1, 7, 3, 4])).toEqual([84, 12, 28, 21]);
+  expect(arrayOfArrayProducts([1, 7, 3, 4])).toEqual([84, 12, 28, 21]);
 });
 
 // Given tuple data describing relationships between parents and children write a function that returns true if individuals share a common ancestor.
@@ -709,6 +737,7 @@ test('Given a matrix of 1s and 0s return how many islands of 1s there are', () =
   expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
 });
 
+
 /*
 // given an int N and a list of ints L of length m, find all pairs of ints in L that sum to N. Do it in the best possible run time.
 // say an array is triangular if the elements when read l to r are strictly increasing up to some point and then decreasing. [2, 3, 4, 1]. find the top of the triangle index.
@@ -760,16 +789,6 @@ test('Given a board with no tokens it returns false', () => {
   expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
 });
 
-#Array Index & Element Equality
-+
-+Given an array of sorted distinct integers named arr, write a function that returns an index i in arr for which arr[i] = i or -1 if no such index exists.
-+
-+Implement the most efficient solution possible, prove the correctness of your solution and analyze its runtime complexity (in terms of n - the length of arr).
-+
-+Examples:
-+
-+    Given arr = [-8,0,2,5] the function returns 2, since arr[2] = 2
-+    Given arr = [-1,0,3,6] the function returns -1, since no index in arr satisfies arr[i] = i
 
   function isMatch(text, pattern) {
     let pIndex = 0;
