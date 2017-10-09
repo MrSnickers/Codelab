@@ -737,7 +737,44 @@ test('Given a matrix of 1s and 0s return how many islands of 1s there are', () =
   expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
 });
 
+// Spiral Print
+function spiralCopy(inputMatrix) {
+  let jmax = inputMatrix[0].length - 1;
+  let jmin = 0;
+  let imax = inputMatrix.length - 1;
+  let imin = 0;
+  const returnArray = [];
+  while (imax >= imin && jmax >= jmin) {
+    for (let j = jmin; j <= jmax; j++) {
+      returnArray.push(inputMatrix[imin][j]);
+    }
+    imin++;
+    for (let i = imin; i <= imax; i++) {
+      returnArray.push(inputMatrix[i][jmax]);
+    }
+    jmax--;
+    if (jmax < jmin) { break; }
+    for (let j = jmax; j >= jmin; j--) {
+      returnArray.push(inputMatrix[imax][j]);
+    }
+    imax--;
+    if (imax < imin) { break; }
+    for (let i = imax; i >= imin; i--) {
+      returnArray.push(inputMatrix[i][jmin]);
+    }
+    jmin++;
+  }
+  return returnArray;
+}
 
+const inputMatrix = [[1, 2, 3, 4, 5],
+                    [6, 7, 8, 9, 10],
+                    [11, 12, 13, 14, 15],
+                    [16, 17, 18, 19, 20]];
+
+test('Given a matrix return an array of elements aquired in a spiral', () => {
+  expect(spiralCopy(inputMatrix)).toEqual([1, 2, 3, 4, 5, 10, 15, 20, 19, 18, 17, 16, 11, 6, 7, 8, 9, 14, 13, 12]);
+});
 /*
 // given an int N and a list of ints L of length m, find all pairs of ints in L that sum to N. Do it in the best possible run time.
 // say an array is triangular if the elements when read l to r are strictly increasing up to some point and then decreasing. [2, 3, 4, 1]. find the top of the triangle index.
@@ -764,7 +801,7 @@ const failBoard = [[0,1,2],
  [0,2,1]]
 
 
-function hasWon(board, token) {
+  function hasWon(board, token) {
   for (let i = 0; i < board[0].length; i++) {
     if (board[i][0] === token && board[i][1] === token && board[i][2] === token) {
       return true;
