@@ -775,6 +775,42 @@ const inputMatrix = [[1, 2, 3, 4, 5],
 test('Given a matrix return an array of elements aquired in a spiral', () => {
   expect(spiralCopy(inputMatrix)).toEqual([1, 2, 3, 4, 5, 10, 15, 20, 19, 18, 17, 16, 11, 6, 7, 8, 9, 14, 13, 12]);
 });
+
+// Calculate the busiest time in the mall
+function findBusiestPeriod(data) {
+  const bestTotal = [0, ''];
+  let currentTotal = 0;
+  for (let i = 0; i <= data.length - 1; i++) {
+    if (data[i][2] === 1) {
+      currentTotal += data[i][1];
+    } else {
+      currentTotal -= data[i][1];
+    }
+    if (data[i + 1] === undefined || data[i][0] !== data[i + 1][0]) {
+      if (currentTotal > bestTotal[0]) {
+        bestTotal[0] = currentTotal;
+        bestTotal[1] = data[i][0];
+      }
+    }
+  }
+  return bestTotal[1];
+}
+
+const data = [[1487799425, 14, 1],
+              [1487799425, 4, 0],
+              [1487799425, 2, 0],
+              [1487800378, 10, 1],
+              [1487801478, 18, 0],
+              [1487801478, 18, 1],
+              [1487901013, 1, 0],
+              [1487901211, 7, 1],
+              [1487901211, 7, 0]];
+
+test('Given a log of entries and exits, it returns the time at which the most people are in the mall', () => {
+  expect(findBusiestPeriod(data)).toEqual(1487800378);
+});
+
+
 /*
 // given an int N and a list of ints L of length m, find all pairs of ints in L that sum to N. Do it in the best possible run time.
 // say an array is triangular if the elements when read l to r are strictly increasing up to some point and then decreasing. [2, 3, 4, 1]. find the top of the triangle index.
