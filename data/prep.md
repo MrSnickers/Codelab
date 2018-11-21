@@ -217,4 +217,28 @@ Interview Videos (30% off coupon): What's a Facebook-style interview like? These
 And remember: Everything in my slides is there for a reason, and that's because I really believe it'll help you. I encourage you to actually follow that handout above and that I discussed in my class. Review those slides again too, and try to burn that advice in your memory.
 
 Good luck!
-Gayle
+
+=========== AMAZON ===============
+
+The coding test itself is 90 minutes, with 15 minutes for a multiple choice question and a brief survey afterward. You cannot stop a section once you’ve begun, so I encourage you to be in a quiet spot ahead of time where you can focus without distraction. The link is valid for 7 days.
+
+ 
+A few things to note:
+
+- You can use any of the following languages you’re comfortable with: C#, C, C++, Java, Python, Ruby, or JavaScript.
+
+- We are interested in your demonstration of problem solving, writing correct code, applying patterns/data structures, and optimizing for algorithmic performance on the tests. It’s best to mentally prepare for this.
+
+ 
+To best prepare for the online coding challenge, here are some resources:
+
+•            Fundamentals: Go back and re-educate yourself on all data structures and data structure algorithms. They come up all the time. Understand all time and space complexity. Make sure you even get into more exotic things like hashmaps, b+trees (and variants), caches (and associated algorithms). You may want to visit www.codechef.com
+
+•            Project Euler - http://projecteuler.net/. If you’ve been out of practice, do up to problem 60 or so. You should be forced to build useful libraries, which will help give practical experience for interview like problems. Don’t cheat or take shortcuts.
+
+•            Google Coding Contest has additional practice questions: http://code.google.com/codejam/contests.html
+
+•            Understand high scale architecture. Go look at how other big sites are structured:
+http://highscalability.com/blog/category/example
+
+•            Try out this demo version of the assessment. This is an online practice version of the user interface and functionality: https://www.myamcat.com/amazon-lateral-demo
