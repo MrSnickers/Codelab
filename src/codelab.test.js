@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, max-len */
+/* eslint-disable max-len */
 
 /*
  This is a TDD file of various code challenges I have found on the web and the solutions I coded up.
@@ -44,7 +44,7 @@ function maxset(array) {
         const subarray = inputArray.slice(latestHead, i);
         const sum = subarray.reduce((a, b) => a + b);
         if ((sum > biggestSum) ||
-            (sum === biggestSum && subarray.length > biggestFound.length)) {
+          (sum === biggestSum && subarray.length > biggestFound.length)) {
           biggestFound = subarray;
           biggestSum = sum;
         }
@@ -188,26 +188,26 @@ function flattenHash(hash, rootKey = '') {
 }
 
 const testHash =
-  {
-    Key1: 1,
-    Key2: {
-      a: 2,
-      b: 3,
-      c: {
-        d: 3,
-        e: 1,
-      },
+{
+  Key1: 1,
+  Key2: {
+    a: 2,
+    b: 3,
+    c: {
+      d: 3,
+      e: 1,
     },
-  };
+  },
+};
 
 const flattenedTestHash =
-  {
-    Key1: 1,
-    'Key2.a': 2,
-    'Key2.b': 3,
-    'Key2.c.d': 3,
-    'Key2.c.e': 1,
-  };
+{
+  Key1: 1,
+  'Key2.a': 2,
+  'Key2.b': 3,
+  'Key2.c.d': 3,
+  'Key2.c.e': 1,
+};
 
 test('Given a nested hash, it will return a one hash with no nesting', () => {
   expect(flattenHash(testHash)).toEqual(flattenedTestHash);
@@ -728,10 +728,10 @@ function findNeighbors(matrix, i, j) {
   resolveIsland(matrix, i, j + 1);
 }
 const binaryMatrix = [[0, 1, 0, 1, 0],
-                     [0, 0, 1, 1, 1],
-                     [1, 0, 0, 1, 0],
-                     [0, 1, 1, 0, 0],
-                     [1, 0, 1, 0, 1]];
+[0, 0, 1, 1, 1],
+[1, 0, 0, 1, 0],
+[0, 1, 1, 0, 0],
+[1, 0, 1, 0, 1]];
 
 test('Given a matrix of 1s and 0s return how many islands of 1s there are', () => {
   expect(getNumberOfIslands(binaryMatrix)).toEqual(6);
@@ -768,9 +768,9 @@ function spiralCopy(inputMatrix) {
 }
 
 const inputMatrix = [[1, 2, 3, 4, 5],
-                    [6, 7, 8, 9, 10],
-                    [11, 12, 13, 14, 15],
-                    [16, 17, 18, 19, 20]];
+[6, 7, 8, 9, 10],
+[11, 12, 13, 14, 15],
+[16, 17, 18, 19, 20]];
 
 test('Given a matrix return an array of elements aquired in a spiral', () => {
   expect(spiralCopy(inputMatrix)).toEqual([1, 2, 3, 4, 5, 10, 15, 20, 19, 18, 17, 16, 11, 6, 7, 8, 9, 14, 13, 12]);
@@ -797,14 +797,14 @@ function findBusiestPeriod(data) {
 }
 
 const data = [[1487799425, 14, 1],
-              [1487799425, 4, 0],
-              [1487799425, 2, 0],
-              [1487800378, 10, 1],
-              [1487801478, 18, 0],
-              [1487801478, 18, 1],
-              [1487901013, 1, 0],
-              [1487901211, 7, 1],
-              [1487901211, 7, 0]];
+[1487799425, 4, 0],
+[1487799425, 2, 0],
+[1487800378, 10, 1],
+[1487801478, 18, 0],
+[1487801478, 18, 1],
+[1487901013, 1, 0],
+[1487901211, 7, 1],
+[1487901211, 7, 0]];
 
 test('Given a log of entries and exits, it returns the time at which the most people are in the mall', () => {
   expect(findBusiestPeriod(data)).toEqual(1487800378);
@@ -947,3 +947,499 @@ function throttle(wait, onLast, onFirst, interval, timestamps) {
 "boat", "got" 298 -
 "thought", "sloughs" 674 -
 */
+
+// function calculate_distance(destination){
+//     const x_distance = Math.abs(destination[0]);
+//     const y_distance = Math.abs(destination[1]);
+//     return Math.sqrt(Math.pow(x_distance, 2) + Math.pow(y_distance, 2));
+// }
+
+
+// function ClosestXdestinations(numDestinations, allLocations, numDeliveries)
+// {
+//     console.log('a', calculate_distance([1, -3]));
+//     console.log('b', calculate_distance([1, 2]));
+//     const sortedLocations = allLocations.sort((a, b)=>{return calculate_distance(a) - calculate_distance(b)});
+//     console.log('sorted', sortedLocations)
+//     return sortedLocations.slice(0, numDeliveries);
+// }
+
+// destimations = [[1, -3], [1, 2]]
+
+// dests = [[3,6], [2,4], [5,3], [2,7]]
+
+// console.log(ClosestXdestinations(4, destimations, 1));
+
+function optimalUtilization(max, forwardRoutes, returnRoutes) {
+  let allRoutes = {};
+  for (let route of forwardRoutes) {
+    for (let reverse of returnRoutes) {
+      totalDistance = route[1] + reverse[1];
+      if (totalDistance <= max) {
+        if (allRoutes[totalDistance]) {
+          console.log('existing', allRoutes[totalDistance]);
+          allRoutes[totalDistance] = allRoutes[totalDistance].concat([[route[0], reverse[0]]]);
+          console.log('became', allRoutes[totalDistance]);
+        } else {
+          allRoutes[totalDistance] = [[route[0], reverse[0]]]
+        }
+      }
+    }
+  }
+  console.log(Object.keys(allRoutes))
+  optimizedDistance = Object.keys(allRoutes).sort((a, b) => { return b - a })[0];
+  return allRoutes[optimizedDistance];
+}
+
+const total = 20;
+const forward = [[1, 8], [2, 15], [3, 9]];
+const reverse = [[1, 8], [2, 11], [3, 12]];
+
+
+console.log(optimalUtilization(total, forward, reverse));
+
+/*
+    Instructions:
+    Please implement the top_k_words function to satisfy the following requirements:
+
+      1) Given a string and integer return the top k words by frequency.
+         Examples:
+           String[] top_k_words("It's a dog eat dog world", 1) => ["dog"]
+           String[] top_k_words("Hello New York, New York", 2) => ["new", "york"]
+           String[] top_k_words("A poem about Mary. Mary had a little lamb, its fleece was white as snow; And everywhere that Mary went the lamb was sure to go.", 4) => ["mary", "lamb", "was", "a"]
+      2) Treat uppercase and lowercase words as the same word.
+      3) Remove punctuation.
+      4) Once you have a working solution sorting top k words by frequency please
+         apply an alphabetical secondary sort.
+         Example:
+           In the above example, ["mary", "lamb", "was", "a"] is correctly sorted by
+           frequency.
+             [["mary", 3], ["lamb", 2], ["was",2], ["a", 2]]
+           Sorting by frequency, then alphabetical should yield
+             [["mary", 3], ["a", 2], ["lamb",2], ["was", 2]]
+           The final result should look like this:
+             ["mary", "a", "lamb", "was"]
+      5) As a caller of your function, I decide to call it with `top_k_words(str, -2)`. Calling `top_k_words` with `-2` does not yield any valid output. Modify your solution to handle this input.
+
+    Feel free to use Google to check Javascript syntax and functionality
+
+    You have 60 minutes to complete the problem  Please email arawding@handy.com once you have completed the problem.
+*/
+
+// convert string to array
+// sanitize each word
+// create mapping of word to frequency
+// convert map to array
+// sort array by frequency
+// return subarray of 0 index to k
+
+"use strict";
+
+var _ = require('underscore')
+
+var str = "Two vast and trunkless legs of stone Stand in the desert. Near them, on the sand, Half sunk, a shattered visage lies, whose frown, And wrinkled lip, and sneer of cold command, Tell that its sculptor well those passions read Which yet survive, stamped on these lifeless things, The hand that mocked them and the heart that fed: And on the pedestal these words appear: 'My name is Ozymandias, king of kings: Look on my works, ye Mighty, and despair!' Nothing beside remains. Round the decay Of that colossal wreck, boundless and bare The lone and level sands stretch far away."
+
+function sanitize(word) {
+  var lowerCaseWord = word.toLowerCase();
+  return lowerCaseWord.replace(/[^\w]|_/g, "");
+
+}
+
+function convertToSanitizedArray(string) {
+  const wordArray = string.split(' ')
+  return _.map(wordArray, sanitize);
+}
+
+function createWordHash(array) {
+  var wordHash = {};
+  for (var word of array) {
+    if (wordHash[word]) {
+      wordHash[word] = wordHash[word] + 1;
+    } else {
+      wordHash[word] = 1;
+    }
+  }
+  return wordHash;
+}
+
+function top_k_words(str, k) {
+  var sanitizedArray = convertToSanitizedArray(str);
+  var wordHash = createWordHash(sanitizedArray);
+  var sortableArray = Object.keys(wordHash);
+  sortableArray.sort(function (a, b) {
+    return wordHash[b] - wordHash[a];
+  })
+  return sortableArray.slice(0, k);
+}
+
+console.log(top_k_words(str, 9));
+
+/* Problem Name is &&& Longest Word &&& PLEASE DO NOT REMOVE THIS LINE. */
+
+/**
+ * Instructions to candidate.
+ *  1) Given a a string of letters and a dictionary, the function longestWord should
+ *     find the longest word or words in the dictionary that can be made from the letters
+ *     Input: letters = "oet", dictionary = {"to","toe","toes", "tree"}
+ *     Output: {"toe"}
+ *     Only lowercase letters will occur in the dictionary and the letters
+ *     The length of letters will be between 1 and 10 characters
+ *     The solution should work well for a dictionary of over 100,000 words
+ *  2) Run this code in the REPL to observe its behaviour.
+ *  3) Consider adding some additional tests in doTestsPass().
+ *  4) Implement the longestWord() method correctly.
+ *  5) If time permits, introduce '?' which can represent any letter.  "to?" could match to "toe", "ton" etc
+ */
+
+// query input letters for exclusion criteria
+// pass exclusion criteria and apply to dictionary
+// sort dictionary
+
+var _ = require('underscore');
+
+
+function processInput(input) {
+  var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
+  var exclusion = {};
+  for (var letter in alphabet) {
+    var tooMany = 1;
+    for (var item in input) {
+      if (item == letter) {
+        tooMany += 1;
+      }
+    }
+    exclusion[letter] = tooMany;
+  }
+  return exclusion;
+}
+
+function excludeWords(words, exclusion) {
+  var returnArray = [];
+  for (var word in words) {
+    var wordExculsion = exclusion;
+    for (var letter in word) {
+      if (exclusion[letter] = 1) {
+        break;
+      } else {
+        exclusion[letter] -= 1;
+      }
+    }
+    returnArray.push(word);
+  }
+}
+
+function longestWord(input, words) {
+
+  var eligibleWords = excludeWords(words, processInput(input));
+  var longestSoFar = [];
+  var bestLength = 0;
+  for (var word in eligibleWords) {
+    if (word.length > bestLength) {
+      console(word.length);
+      bestLength = word.length;
+      longestSoFar = [word];
+    } else if (word.length = bestLength) {
+      longestSoFar.push(word);
+    }
+  }
+  console.log(longestSoFar);
+  return longestSoFar;
+}
+
+// class Dictionary {
+//   constructor(words) {
+//     this.words = words
+//   }
+
+//   contains(word) {
+//     return _.contains(this.words, word);
+//   }
+// }
+
+// function longestWord(letters, dict) {
+//   return dict.contains(letters) ? [letters] : [];
+// }
+
+function arraysEqual(arr1, arr2) {
+  return _.difference(arr1, arr2).length == 0 && _.difference(arr2, arr1) == 0
+}
+
+function doTestsPass() {
+  var words = ["io", "ioe", "ioed", "doe", "dog", "god", "dogs", "book", "bababa"];
+
+  var result = arraysEqual(["ioe"], longestWord("ioe", words));
+  result = result && arraysEqual(["ioes", "dogs"], longestWord("oseidg", words));
+
+  return result;
+}
+
+/**
+ * Main execution entry.
+ */
+if (doTestsPass()) {
+  console.log("All tests pass!");
+} else {
+  console.error("There are test failures.");
+}
+
+
+
+// Amazon
+
+/*
+ Given a boolean 2D matrix, find the number of islands. A group of connected 1s forms an island.
+ For example, the below matrix contains 5 islands
+ 
+ Ex:
+ 
+ Input : mat[][] = {{0, 0, 0},
+                    {0, 1, 0}, 1,1 -> 2,0
+                    {0, 0, 1},
+                    {1, 0, 1}}
+Output : 5
+
+*/
+'use strict;'
+const eraseLand = (x, y, matrix) => {
+  if (x - 1 > 0 && matrix[x - 1][y] === 1) {
+    matrix[x - 1][y] = 0;
+    eraseLand(x - 1, y);
+  }
+  if (x - 1 > 0 && y - 1 > 0 && matrix[x - 1][y - 1] === 1) {
+    matrix[x - 1][y - 1] = 0;
+    findNeighbors(x - 1, y);
+  }
+  if (x - 1 > 0 && y + 1 < matrix.length && matrix[x - 1][y - 1] === 1) {
+    matrix[x - 1][y - 1] = 0;
+    eraseLand(x - 1, y);
+  }
+  if (x + 1 < matrix.length && matrix[x + 1][y] === 1) {
+    matrix[x + 1][y] = 0;
+    findNeighbors(x + 1, y);
+  }
+  if (x + 1 < matrix.length && y - 1 > 0 && matrix[x + 1][y - 1] === 1) {
+    matrix[x + 1][y - 1] = 0;
+    findNeighbors(x + 1, y);
+  }
+  if (x + 1 < matrix.length && y + 1 < matrix.length && matrix[x + 1][y + 1] === 1) {
+    matrix[x + 1][y + 1] = 0;
+    findNeighbors(x + 1, y);
+  }
+  if (y - 1 > 0 && matrix[x][y - 1] === 1) {
+    matrix[x][y - 1] = 0;
+    findNeighbors(x, y - 1);
+  }
+  if (y + 1 < matrix.length && matrix[x][y + 1] === 1) {
+    matrix[x][y + 1] = 0;
+    findNeighbors(x, y + 1);
+  }
+}
+
+const findIslands = (matrix) => {
+  const matrixCopy = matrix;
+  let islandCount = 0;
+  for (let x = 0; x < matrixCopy[0].length; x++) {
+    for (let y = 0; y < matrixCopy.length; y++) {
+      if (matrixCopy[x][y] === 1) {
+        islandCount++;
+        eraseLand(x, y, matrixCopy);
+      }
+    }
+  }
+}
+
+// Create a random sentence generator based on an input corpus file with the following strategy:
+// 1. Choose a random start word from the corpus
+// 2. The next word is randomly chosen from the words that appear directly after the previous word in the corpus
+// For example, if the corpus is “This is a sentence and it is somewhat good but is a sentence”
+
+
+const input = "This is a sentence and it is somewhat good but is a sentence"
+// rw = RandomWriter.new(input)
+// rw.write(6)
+// rw.write(100)
+// rw.write(1000)
+
+
+
+// This is somewhat good but is
+
+// Convert input string to array
+// make array to lookup hash
+// make hash values eligible next words for each word
+// select next word for length parameter
+
+const makeHash = (input) => {
+  const Hash = {};
+  for (let i = 0; i < input.length - 1; i++) {
+    if (Hash[input[i]]) {
+      Hash[input[i]].push(input[i + 1]);
+    } else {
+      Hash[input[i]] = [input[i + 1]];
+    }
+  }
+  const finalWord = input[input.length - 1]
+  if (Hash[finalWord]) {
+    Hash[finalWord].push(input[0]);
+  } else {
+    Hash[finalWord] = [input[0]];
+  }
+  return Hash;
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+
+const sentenceGenerator = (input, length) => {
+  const sentence = [];
+  const inputArray = input.split(' ');
+  const hash = makeHash(inputArray);
+  const firstWordIndex = getRandomInt(inputArray.length);
+  const firstWord = inputArray[firstWordIndex];
+  sentence.push(firstWord);
+  for (let i = 1; i < length; i++) {
+    const workingWord = sentence[sentence.length - 1];
+    const possibleNext = hash[workingWord];
+    const selectedNext = possibleNext[getRandomInt(possibleNext.length)];
+    sentence.push(selectedNext);
+  }
+  return sentence.join(" ");
+}
+
+console.log(sentenceGenerator(input, 100));
+
+function isBalanced(string) {
+  const characters = string.split('');
+  const closingBrackets = new Set([')', ']', '}']);
+  const matchingBracketsMap = { '(': ')', '[': ']', '{': '}' };
+  const closingBracketsNeeded = [];
+  for (const character of characters) {
+    console.log('character', character);
+    if (closingBrackets.has(character)) {
+      if (character == closingBracketsNeeded[0]) {
+        closingBracketsNeeded.shift();
+      } else {
+        return ('NO');
+      }
+    }
+    if (matchingBracketsMap[character]) {
+      closingBracketsNeeded.unshift(matchingBracketsMap[character]);
+    }
+  }
+  return ('YES');
+}
+
+console.log(isBalanced('[{]}'));
+
+// Complete the oddNumbers function below.
+function oddNumbers(l, r) {
+  const offset = l % 2 ? 0 : 1;
+  const returnArray = [];
+  for (let i = l + offset; i <= r; i = i + 2) {
+    returnArray.push(i);
+  }
+  return returnArray;
+
+}
+
+
+function isBalanced(string) {
+  const characters = string.split('');
+  const closingBrackets = new Set([')', ']', '}']);
+  const matchingBracketsMap = { '(': ')', '[': ']', '{': '}' };
+  const closingBracketsNeeded = [];
+  for (const character of characters) {
+    if (closingBrackets.has(character)) {
+      if (character == closingBracketsNeeded[0]) {
+        closingBracketsNeeded.shift();
+      } else {
+        return ('NO');
+      }
+    }
+    if (matchingBracketsMap[character]) {
+      closingBracketsNeeded.unshift(matchingBracketsMap[character]);
+    }
+  }
+  return ('YES');
+}
+
+
+<ul id="list">
+  <li>wiskers on kittens</li>
+  <li>bright copper kettles</li>
+  <li>warm woolen mittens</li>
+</ul>
+  <form>
+    <input type="text" id="input" />
+    <button id="insert" type="submit">Insert</button>
+  </form>
+
+var form = document.querySelector("form");
+var list = document.getElementById("list");
+var input = document.getElementById("input");
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  var text = input.value.trim();
+  if (text) {
+    var newItem = document.createElement('li');
+    newItem.innerText = text;
+    list.appendChild(newItem);
+    document.getElementById("input").value = '';
+  }
+
+})
+
+ul li: nth - child(3n + 3) {
+  color: red;
+}
+
+< !--Enter your HTML code here-- >
+  <div class="grid">
+    <div class="pair">
+      <div class="enhanced"></div>
+      <div class="enhanced"></div>
+    </div><div class="pair">
+      <div class="enhanced"></div>
+      <div class="enhanced"></div>
+    </div>
+  </div>
+
+  /* Add your css styles here */
+  * {
+    box- sizing: border - box;   
+ }
+ 
+ .grid {
+  font - size: 0rem;
+  width: 100vw;
+  white - space: nowrap;
+}
+ 
+ .pair {
+  display: inline - block;
+  font - size: 0rem;
+  width: 50 %;
+}
+ 
+ .enhanced {
+  border: 1px solid #000;
+  display: inline - block;
+  font - size: 1rem;
+  height: 10 %;
+  width: 50 %;
+}
+
+@media screen and(max - width: 720px){
+   .pair {
+    display: block;
+  }
+}
+
+@media screen and(max - width: 360px){
+   .enhanced {
+    display: block;
+    width: 100 %;
+  }
+}
